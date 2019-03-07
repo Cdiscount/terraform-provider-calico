@@ -106,9 +106,9 @@ func Provider() terraform.ResourceProvider {
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
-			"calico_ippool":             resourceCalicoIpPool(),
-			"calico_bgppeer":            resourceCalicoBgpPeer(),
-			"calico_bgpconfiguration":   resourceCalicoBgpConfiguration(),
+			"calico_ippool":           resourceCalicoIpPool(),
+			"calico_bgppeer":          resourceCalicoBgpPeer(),
+			"calico_bgpconfiguration": resourceCalicoBgpConfiguration(),
 		},
 
 		ConfigureFunc: providerConfigure,

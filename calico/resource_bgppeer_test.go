@@ -20,9 +20,9 @@ func TestAccBgpPeer(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckBgpPeerExists("calico_bgppeer.test"),
 					resource.TestCheckResourceAttr("calico_bgppeer.test", "metadata.0.name", "testbgppeer"),
-					resource.TestCheckResourceAttr("calico_bgppeer.test", "spec.0.node", "global"),
-					resource.TestCheckResourceAttr("calico_bgppeer.test", "spec.0.peer_ip", "192.168.0.5"),
 					resource.TestCheckResourceAttr("calico_bgppeer.test", "spec.0.as_number", "62512"),
+					resource.TestCheckResourceAttr("calico_bgppeer.test", "spec.0.node_selector", "k == 'v'"),
+					resource.TestCheckResourceAttr("calico_bgppeer.test", "spec.0.peer_ip", "192.168.0.5"),
 				),
 			},
 			{
@@ -31,8 +31,7 @@ func TestAccBgpPeer(t *testing.T) {
 					testAccCheckBgpPeerExists("calico_bgppeer.test"),
 					resource.TestCheckResourceAttr("calico_bgppeer.test", "metadata.0.name", "testbgppeer2"),
 					resource.TestCheckResourceAttr("calico_bgppeer.test", "spec.0.node", "global"),
-					resource.TestCheckResourceAttr("calico_bgppeer.test", "spec.0.peer_ip", "192.168.0.6"),
-					resource.TestCheckResourceAttr("calico_bgppeer.test", "spec.0.as_number", "62513"),
+					resource.TestCheckResourceAttr("calico_bgppeer.test", "spec.0.peer_selector", "k == 'v'"),
 				),
 			},
 		},
@@ -94,9 +93,9 @@ resource "calico_bgppeer" "test" {
     name = "testbgppeer"
   }
   spec{
-    node = "global"
-    peer_ip = "192.168.0.5"
 	as_number = 62512
+	node_selector = "k == 'v'"
+    peer_ip = "192.168.0.5"
   }
 }`
 
@@ -107,7 +106,6 @@ resource "calico_bgppeer" "test" {
   }
   spec{
     node = "global"
-    peer_ip = "192.168.0.6"
-	as_number = 62513
+	peer_selector = "k == 'v'"
   }
 }`

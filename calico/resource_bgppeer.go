@@ -35,17 +35,25 @@ func resourceCalicoBgpPeer() *schema.Resource {
 				ForceNew: false,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						"as_number": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
 						"node": {
 							Type:     schema.TypeString,
 							Optional: true,
 							ForceNew: true,
 						},
+						"node_selector": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
 						"peer_ip": {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
-						"as_number": {
-							Type:     schema.TypeInt,
+						"peer_selector": {
+							Type:     schema.TypeString,
 							Optional: true,
 						},
 					},
@@ -59,9 +67,11 @@ func resourceCalicoBgpPeer() *schema.Resource {
 func dToBgpPeerSpec(d *schema.ResourceData) (api.BGPPeerSpec, error) {
 	spec := api.BGPPeerSpec{}
 
-	spec.Node = dToString(d, "spec.0.node")
-	spec.PeerIP = dToString(d, "spec.0.peer_ip")
 	spec.ASNumber = dToAsNumber(d, "spec.0.as_number")
+	spec.Node = dToString(d, "spec.0.node")
+	spec.NodeSelector = dToString(d, "spec.0.node_selector")
+	spec.PeerIP = dToString(d, "spec.0.peer_ip")
+	spec.PeerSelector = dToString(d, "spec.0.peer_selector")
 
 	return spec, nil
 }
@@ -106,9 +116,11 @@ func resourceCalicoBgpPeerRead(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(nameBgpPeer)
 	d.Set("metadata.0.name", BgpPeer.ObjectMeta.Name)
-	d.Set("spec.0.node", BgpPeer.Spec.Node)
-	d.Set("spec.0.peer_ip", BgpPeer.Spec.PeerIP)
 	d.Set("spec.0.as_number", BgpPeer.Spec.ASNumber.String())
+	d.Set("spec.0.node", BgpPeer.Spec.Node)
+	d.Set("spec.0.node_selector", BgpPeer.Spec.NodeSelector)
+	d.Set("spec.0.peer_ip", BgpPeer.Spec.PeerIP)
+	d.Set("spec.0.peer_selector", BgpPeer.Spec.PeerSelector)
 
 	return nil
 }

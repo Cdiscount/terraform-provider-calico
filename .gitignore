@@ -1,6 +1,7 @@
 .idea/
 dist/
 vendor/
+bin/
 
 glide.lock
 terraform-provider-calico

@@ -35,12 +35,17 @@ func resourceCalicoIpPool() *schema.Resource {
 				ForceNew: false,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						"block_size": {
+							Type:     schema.TypeInt,
+							Optional: true,
+							ForceNew: true,
+						},
 						"cidr": {
 							Type:     schema.TypeString,
 							Optional: true,
 							ForceNew: true,
 						},
-						"nat_outgoing": {
+						"disabled": {
 							Type:     schema.TypeBool,
 							Optional: true,
 						},
@@ -48,8 +53,12 @@ func resourceCalicoIpPool() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
-						"disabled": {
+						"nat_outgoing": {
 							Type:     schema.TypeBool,
+							Optional: true,
+						},
+						"node_selector": {
+							Type:     schema.TypeString,
 							Optional: true,
 						},
 					},
@@ -63,10 +72,12 @@ func resourceCalicoIpPool() *schema.Resource {
 func dToIpPoolSpec(d *schema.ResourceData) (api.IPPoolSpec, error) {
 	spec := api.IPPoolSpec{}
 
+	spec.BlockSize = dToInt(d, "spec.0.block_size")
 	spec.CIDR = dToString(d, "spec.0.cidr")
-	spec.NATOutgoing = dToBool(d, "spec.0.nat_outgoing")
 	spec.Disabled = dToBool(d, "spec.0.disabled")
 	spec.IPIPMode = dToIpIpMode(d, "spec.0.ipip_mode")
+	spec.NATOutgoing = dToBool(d, "spec.0.nat_outgoing")
+	spec.NodeSelector = dToString(d, "spec.0.node_selector")
 
 	return spec, nil
 }
@@ -113,10 +124,12 @@ func resourceCalicoIpPoolRead(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(nameIpPool)
 	d.Set("metadata.0.name", ipPool.ObjectMeta.Name)
+	d.Set("spec.0.block_size", ipPool.Spec.BlockSize)
 	d.Set("spec.0.cidr", ipPool.Spec.CIDR)
+	d.Set("spec.0.disabled", ipPool.Spec.Disabled)
 	d.Set("spec.0.ipip_mode", ipPool.Spec.IPIPMode)
 	d.Set("spec.0.nat_outgoing", ipPool.Spec.NATOutgoing)
-	d.Set("spec.0.disabled", ipPool.Spec.Disabled)
+	d.Set("spec.0.node_selector", ipPool.Spec.NodeSelector)
 
 	return nil
 }

@@ -20,10 +20,12 @@ func TestAccIpPool(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckIpPoolExists("calico_ippool.test"),
 					resource.TestCheckResourceAttr("calico_ippool.test", "metadata.0.name", "testippool"),
+					resource.TestCheckResourceAttr("calico_ippool.test", "spec.0.block_size", "26"),
 					resource.TestCheckResourceAttr("calico_ippool.test", "spec.0.cidr", "192.168.1.0/24"),
-					resource.TestCheckResourceAttr("calico_ippool.test", "spec.0.nat_outgoing", "true"),
-					resource.TestCheckResourceAttr("calico_ippool.test", "spec.0.ipip_mode", "Never"),
 					resource.TestCheckResourceAttr("calico_ippool.test", "spec.0.disabled", "true"),
+					resource.TestCheckResourceAttr("calico_ippool.test", "spec.0.ipip_mode", "Never"),
+					resource.TestCheckResourceAttr("calico_ippool.test", "spec.0.nat_outgoing", "true"),
+					resource.TestCheckResourceAttr("calico_ippool.test", "spec.0.node_selector", "k == 'v'"),
 				),
 			},
 			{
@@ -32,9 +34,9 @@ func TestAccIpPool(t *testing.T) {
 					testAccCheckIpPoolExists("calico_ippool.test"),
 					resource.TestCheckResourceAttr("calico_ippool.test", "metadata.0.name", "testippool2"),
 					resource.TestCheckResourceAttr("calico_ippool.test", "spec.0.cidr", "192.168.0.0/24"),
-					resource.TestCheckResourceAttr("calico_ippool.test", "spec.0.nat_outgoing", "false"),
-					resource.TestCheckResourceAttr("calico_ippool.test", "spec.0.ipip_mode", "Always"),
 					resource.TestCheckResourceAttr("calico_ippool.test", "spec.0.disabled", "false"),
+					resource.TestCheckResourceAttr("calico_ippool.test", "spec.0.ipip_mode", "Always"),
+					resource.TestCheckResourceAttr("calico_ippool.test", "spec.0.nat_outgoing", "false"),
 				),
 			},
 		},
@@ -96,10 +98,12 @@ resource "calico_ippool" "test" {
     name = "testippool"
   }
   spec{
+	block_size = "26"
     cidr = "192.168.1.0/24"
+	disabled = true	
 	ipip_mode = "Never"
     nat_outgoing = true
-    disabled = true
+	node_selector = "k == 'v'"
   }
 }`
 
@@ -110,8 +114,8 @@ resource "calico_ippool" "test" {
   }
   spec{
     cidr = "192.168.0.0/24"
+	disabled = false
 	ipip_mode = "Always"
     nat_outgoing = false
-    disabled = false
   }
 }`

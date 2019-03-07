@@ -8,10 +8,11 @@ run:
 	echo "Doing nothing"
 
 build:
-	glide up
-	# remove vendor from terraform (FIX for https://github.com/coreos/etcd/issues/9357)
-	@rm -rf vendor/github.com/hashicorp/terraform/vendor
-	go build
+	mkdir -p ./bin
+#	glide up
+    # remove vendor from terraform (FIX for https://github.com/coreos/etcd/issues/9357)
+	@rm -rf ./vendor/github.com/hashicorp/terraform/vendor/golang.org/x/net
+	GOOS=linux go build -o ./bin/terraform-provider-calico .
 
 test: fmt
 	docker run -d \
@@ -19,7 +20,7 @@ test: fmt
  		-p 2380:2380 \
  		-p 2379:2379 \
  		--name etcd_test \
- 		 quay.io/coreos/etcd:v3.2.17 \
+ 		 quay.io/coreos/etcd:v3.2.24 \
  		 etcd \
  			--name etcd_test \
  			--advertise-client-urls http://localhost:2379,http://localhost:4001 \
@@ -35,3 +36,6 @@ test: fmt
 
 fmt:
 	gofmt -w $(GOFMT_FILES)
+
+clean:
+	rm -rf ./bin

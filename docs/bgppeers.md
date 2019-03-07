@@ -18,16 +18,4 @@ resource "calico_bgppeer" "default" {
 }
 ```
 
-## metadata
-|**Field**|**Description**|**Accepted Values**|**Schema**|**Default**|
-|---------|---------------|-------------------|----------|-----------|
-|name|Unique name to describe this resource instance. Required.|Alphanumeric string with optional ., _, or -.|string|
-
-## spec
-|**Field**|**Description**|**Accepted Values**|**Schema**|**Default**|
-|---------|---------------|-------------------|----------|-----------|
-|node|If specified, the scope is node level, otherwise the scope is global.|The hostname of the node to which this peer applies.|string|| 
-|peer_ip|The IP address of this peer.|Valid IPv4 or IPv6 address.|string|| 
-|as_number|The AS Number of this peer.|A valid AS Number, may be specified in dotted notation.|integer/string|| 
-
 More informations [here](https://docs.projectcalico.org/v3.1/reference/calicoctl/resources/bgppeer) 
