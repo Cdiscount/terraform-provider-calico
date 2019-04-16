@@ -13,6 +13,9 @@ func resourceCalicoIpPool() *schema.Resource {
 		Read:   resourceCalicoIpPoolRead,
 		Update: resourceCalicoIpPoolUpdate,
 		Delete: resourceCalicoIpPoolDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 
 		Schema: map[string]*schema.Schema{
 			"metadata": {
@@ -108,7 +111,7 @@ func resourceCalicoIpPoolRead(d *schema.ResourceData, m interface{}) error {
 	calicoClient := m.(config).Client
 	ipPoolInterface := calicoClient.IPPools()
 
-	nameIpPool := dToString(d, "metadata.0.name")
+	nameIpPool := d.Id()
 
 	ipPool, err := ipPoolInterface.Get(ctx, nameIpPool, options.GetOptions{})
 

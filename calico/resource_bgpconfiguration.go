@@ -13,6 +13,9 @@ func resourceCalicoBgpConfiguration() *schema.Resource {
 		Read:   resourceCalicoBgpConfigurationRead,
 		Update: resourceCalicoBgpConfigurationUpdate,
 		Delete: resourceCalicoBgpConfigurationDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 
 		Schema: map[string]*schema.Schema{
 			"metadata": {
@@ -97,7 +100,7 @@ func resourceCalicoBgpConfigurationRead(d *schema.ResourceData, m interface{}) e
 	calicoClient := m.(config).Client
 	BgpConfigurationInterface := calicoClient.BGPConfigurations()
 
-	nameBgpConfiguration := dToString(d, "metadata.0.name")
+	nameBgpConfiguration := d.Id()
 
 	BgpConfiguration, err := BgpConfigurationInterface.Get(ctx, nameBgpConfiguration, options.GetOptions{})
 

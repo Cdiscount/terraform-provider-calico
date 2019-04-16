@@ -13,6 +13,9 @@ func resourceCalicoBgpPeer() *schema.Resource {
 		Read:   resourceCalicoBgpPeerRead,
 		Update: resourceCalicoBgpPeerUpdate,
 		Delete: resourceCalicoBgpPeerDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 
 		Schema: map[string]*schema.Schema{
 			"metadata": {
@@ -100,7 +103,7 @@ func resourceCalicoBgpPeerRead(d *schema.ResourceData, m interface{}) error {
 	calicoClient := m.(config).Client
 	BgpPeerInterface := calicoClient.BGPPeers()
 
-	nameBgpPeer := dToString(d, "metadata.0.name")
+	nameBgpPeer := d.Id()
 
 	BgpPeer, err := BgpPeerInterface.Get(ctx, nameBgpPeer, options.GetOptions{})
 
