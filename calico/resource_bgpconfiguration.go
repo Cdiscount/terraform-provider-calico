@@ -148,7 +148,7 @@ func resourceCalicoBgpConfigurationDelete(d *schema.ResourceData, m interface{})
 	calicoClient := m.(config).Client
 	BgpConfigurationInterface := calicoClient.BGPConfigurations()
 
-	nameBgpConfiguration := dToString(d, "metadata.0.name")
+	nameBgpConfiguration := d.Id()
 
 	_, err := BgpConfigurationInterface.Delete(ctx, nameBgpConfiguration, options.DeleteOptions{})
 	if err != nil {

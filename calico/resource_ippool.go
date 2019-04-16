@@ -162,7 +162,7 @@ func resourceCalicoIpPoolDelete(d *schema.ResourceData, m interface{}) error {
 	calicoClient := m.(config).Client
 	ipPoolInterface := calicoClient.IPPools()
 
-	nameIpPool := dToString(d, "metadata.0.name")
+	nameIpPool := d.Id()
 
 	_, err := ipPoolInterface.Delete(ctx, nameIpPool, options.DeleteOptions{})
 	if err != nil {

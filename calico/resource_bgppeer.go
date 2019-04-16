@@ -153,7 +153,7 @@ func resourceCalicoBgpPeerDelete(d *schema.ResourceData, m interface{}) error {
 	calicoClient := m.(config).Client
 	BgpPeerInterface := calicoClient.BGPPeers()
 
-	nameBgpPeer := dToString(d, "metadata.0.name")
+	nameBgpPeer := d.Id()
 
 	_, err := BgpPeerInterface.Delete(ctx, nameBgpPeer, options.DeleteOptions{})
 	if err != nil {
