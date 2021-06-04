@@ -8,7 +8,6 @@ You can find all the releases [here](https://github.com/cdiscount/terraform-prov
 If you want to build the project by yourself, you can. The prerequisites are :
 
 * Go (version 1.9+)
-* Glide
 
 ```bash
 git clone https://github.com/cdiscount.com/terraform-provider-calico
