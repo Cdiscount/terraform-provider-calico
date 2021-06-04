@@ -9,9 +9,6 @@ run:
 
 build:
 	mkdir -p ./bin
-#	glide up
-    # remove vendor from terraform (FIX for https://github.com/coreos/etcd/issues/9357)
-	@rm -rf ./vendor/github.com/hashicorp/terraform/vendor/golang.org/x/net
 	GOOS=linux go build -o ./bin/terraform-provider-calico .
 
 test: fmt
